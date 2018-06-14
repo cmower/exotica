@@ -179,11 +179,11 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
 
 void Point2Line::Instantiate(Point2LineInitializer &init)
 {
-    link_name = boost::any_cast<std::string>(init.EndEffector[0].getProperty("Link"));
-    base_name = boost::any_cast<std::string>(init.EndEffector[0].getProperty("Base"));
+    link_name = Frames[0].FrameALinkName;
+    base_name = Frames[0].FrameBLinkName;
 
-    line_start = boost::any_cast<Eigen::VectorXd>(init.EndEffector[0].getProperty("BaseOffset")).head<3>();
-    line_end = init.EndPoint.head<3>();
+    line_start = Eigen::Map<Eigen::Vector3d>(Frames[0].FrameBOffset.p.data);
+    line_end = init.EndPoint;
 
     line = line_end - line_start;
     infinite = init.infinite;
