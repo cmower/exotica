@@ -709,6 +709,19 @@ void testIMesh()
     testJacobian(problem);
 }
 
+void testPoint2Line()
+{
+    HIGHLIGHT("Point2Line Test");
+    Initializer map("exotica/Point2Line", {{"Name", std::string("MyTask")},
+                                           {"EndPoint", std::string("1 2 3")},
+                                           {"EndEffector", std::vector<Initializer>({Initializer("Frame", {{"Link", std::string("base")}, {"BaseOffset", std::string("0.5 0 0.5 0 0 0 1")}})})}});
+    UnconstrainedEndPoseProblem_ptr problem = setupProblem(map);
+    testRandom(problem);
+    // TODO: Add testValues
+
+    testJacobian(problem);
+}
+
 void testPoint2Plane()
 {
     {
@@ -809,6 +822,7 @@ int main(int argc, char** argv)
     testIdentity();
     testCoM();
     testIMesh();
+    testPoint2Line();
     testPoint2Plane();
     testQuasiStatic();
     Setup::Destroy();
