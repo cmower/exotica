@@ -52,13 +52,18 @@ public:
 
 private:
     Eigen::Vector3d line;   //<! point that defines the end of the line relative to the starting point
-    // Eigen::VectorXd point;  //<! point in link frame
-    // Eigen::VectorXd start;  //<! start point in base frame
-    // Eigen::VectorXd end;    //<! end point in base frame
     bool infinite;          //<! true: consider the line from 'start' to 'end' as segment
                             //<! false: consider the vector from 'start' to 'end' as direction of line
 
     static Eigen::Vector3d distance(const Eigen::Vector3d &point, const Eigen::Vector3d &line, const bool infinite, const bool dbg);
+
+    std::string link_name;  //<! frame of defined point
+    std::string base_name;  //<! frame of defined line
+
+    Eigen::Vector3d line_start; //<! start point of line in base frame
+    Eigen::Vector3d line_end;   //<! end point of line in base frame
+
+    ros::Publisher pub_marker;  //<! publish marker for RViz
 };
 
 typedef std::shared_ptr<Point2Line> Point2Line_Ptr;

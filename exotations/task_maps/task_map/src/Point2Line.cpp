@@ -90,13 +90,109 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
                 J(i, j) = -(dv.normalized()).dot(Eigen::Map<const Eigen::Vector3d>(Kinematics[0].J[i].getColumn(j).vel.data));
             }
         }
+
+        // visualisation of point, line and their distance
+        if (debug_ && Server::isRos())
+        {
+            visualization_msgs::MarkerArray ma;
+            const Eigen::Map<const Eigen::Vector3d> p(Kinematics[0].Phi(i).p.data);
+            const ros::Time t = ros::Time::now();
+            const std::string common_frame = "exotica/" + base_name;
+            {
+                // line in base frame
+                visualization_msgs::Marker mc;
+                mc.header.stamp = t;
+                mc.frame_locked = true;
+                mc.header.frame_id = common_frame;
+                mc.ns = "cam/line/" + object_name_;
+                mc.type = visualization_msgs::Marker::ARROW;
+                mc.scale.x = 0.01;
+                mc.scale.y = 0.01;
+                mc.scale.z = 0.01;
+                // line start
+                geometry_msgs::Point p;
+                p.x = line_start.x();
+                p.y = line_start.y();
+                p.z = line_start.z();
+                mc.points.push_back(p);
+                // line end
+                const Eigen::Vector3d pe = line_end;
+                p.x = pe.x();
+                p.y = pe.y();
+                p.z = pe.z();
+                mc.points.push_back(p);
+                mc.color.r = 1;
+                mc.color.g = 1;
+                mc.color.b = 0;
+                mc.color.a = 0.2;
+                ma.markers.push_back(mc);
+            }
+            {
+                // point in link frame
+                visualization_msgs::Marker ml;
+                ml.header.stamp = t;
+                ml.frame_locked = true;
+                ml.header.frame_id = common_frame;
+                ml.ns = "lnk/point/" + object_name_;
+                ml.type = visualization_msgs::Marker::SPHERE;
+                ml.scale.x = 0.03;
+                ml.scale.y = 0.03;
+                ml.scale.z = 0.03;
+                ml.color.r = 1;
+                ml.color.g = 0;
+                ml.color.b = 0;
+                ml.color.a = 0.2;
+                ml.pose.position.x = p.x();
+                ml.pose.position.y = p.y();
+                ml.pose.position.z = p.z();
+                ma.markers.push_back(ml);
+            }
+            {
+                // draw 'dv' starting at 'p' in base frame
+                visualization_msgs::Marker mdv;
+                mdv.header.stamp = t;
+                mdv.frame_locked = true;
+                mdv.header.frame_id = common_frame;
+                mdv.ns = "dv/" + object_name_;
+                mdv.type = visualization_msgs::Marker::ARROW;
+                mdv.scale.x = 0.001;
+                mdv.scale.y = 0.01;
+                mdv.scale.z = 0.01;
+                mdv.pose.position.x = p.x();
+                mdv.pose.position.y = p.y();
+                mdv.pose.position.z = p.z();
+                mdv.points.push_back(geometry_msgs::Point());
+                geometry_msgs::Point pdv;
+                pdv.x = dv.x();
+                pdv.y = dv.y();
+                pdv.z = dv.z();
+                mdv.points.push_back(pdv);
+                mdv.color.r = 0;
+                mdv.color.g = 1;
+                mdv.color.b = 0;
+                mdv.color.a = 0.5;
+                ma.markers.push_back(mdv);
+            }
+            pub_marker.publish(ma);
+        }
     }
 }
 
 void Point2Line::Instantiate(Point2LineInitializer &init)
 {
-    line = init.EndPoint.head<3>() - boost::any_cast<Eigen::VectorXd>(init.EndEffector[0].getProperty("BaseOffset")).head<3>();
+    link_name = boost::any_cast<std::string>(init.EndEffector[0].getProperty("Link"));
+    base_name = boost::any_cast<std::string>(init.EndEffector[0].getProperty("Base"));
+
+    line_start = boost::any_cast<Eigen::VectorXd>(init.EndEffector[0].getProperty("BaseOffset")).head<3>();
+    line_end = init.EndPoint.head<3>();
+
+    line = line_end - line_start;
     infinite = init.infinite;
+
+    if (debug_ && Server::isRos())
+    {
+        pub_marker = Server::advertise<visualization_msgs::MarkerArray>("p2l", 1000, true);
+    }
 }
 
 int Point2Line::taskSpaceDim()
