@@ -47,7 +47,7 @@ Eigen::Vector3d Point2Line::distance(const Eigen::Vector3d &point, const Eigen::
     // t = ((s-p)*(e-s)) / (|e-s|^2)    (* denotes the dot product)
 
     // the line starts at the origin of BaseOffset, hence s=0, v='line', vp=t*'line'
-    double t = (-point).dot(line) / line.norm();
+    double t = (point).dot(line) / line.norm();
     if (dbg) HIGHLIGHT_NAMED("P2L", "t " << t);
     if (!infinite)
     {
@@ -85,7 +85,10 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
         phi(i) = dv.norm();
         for (int j = 0; j < J.cols(); j++)
         {
-            J(i, j) = -dv.dot(Eigen::Map<const Eigen::Vector3d>(Kinematics[0].J[i].getColumn(j).vel.data)) / dv.norm();
+            if (phi(i) > 1e-9)
+            {
+                J(i, j) = -(dv.normalized()).dot(Eigen::Map<const Eigen::Vector3d>(Kinematics[0].J[i].getColumn(j).vel.data));
+            }
         }
     }
 }
