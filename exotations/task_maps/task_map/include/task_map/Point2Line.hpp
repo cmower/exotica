@@ -38,7 +38,7 @@
 namespace exotica  {
 class Point2Line : public TaskMap, public Instantiable<Point2LineInitializer> {
 public:
-    Point2Line();
+    Point2Line() { }
 
     virtual ~Point2Line() { }
 
@@ -55,7 +55,15 @@ private:
     bool infinite;          //<! true: consider the line from 'start' to 'end' as segment
                             //<! false: consider the vector from 'start' to 'end' as direction of line
 
-    static Eigen::Vector3d distance(const Eigen::Vector3d &point, const Eigen::Vector3d &line, const bool infinite, const bool dbg);
+    /**
+     * @brief direction computes the vector from a point to its projection on a line
+     * @param point point in base frame
+     * @param line end-point (#infinite: false) or direction (#infinite: true) of the line in base frame (origin at 0)
+     * @param infinite false: #line is the end of the line, true: #line is the direction of the line
+     * @param dbg true: print additional debugging information
+     * @return 3D vector from #point to its projection on #line
+     */
+    static Eigen::Vector3d direction(const Eigen::Vector3d &point, const Eigen::Vector3d &line, const bool infinite, const bool dbg);
 
     std::string link_name;  //<! frame of defined point
     std::string base_name;  //<! frame of defined line

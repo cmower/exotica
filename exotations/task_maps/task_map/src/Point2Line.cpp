@@ -36,7 +36,7 @@ REGISTER_TASKMAP_TYPE("Point2Line", exotica::Point2Line);
 
 namespace exotica
 {
-Eigen::Vector3d Point2Line::distance(const Eigen::Vector3d &point, const Eigen::Vector3d &line, const bool infinite, const bool dbg)
+Eigen::Vector3d Point2Line::direction(const Eigen::Vector3d &point, const Eigen::Vector3d &line, const bool infinite, const bool dbg)
 {
     // http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
     // let:
@@ -62,14 +62,13 @@ Eigen::Vector3d Point2Line::distance(const Eigen::Vector3d &point, const Eigen::
     return dv;
 }
 
-Point2Line::Point2Line() {}
 void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi)
 {
     if (phi.rows() != Kinematics[0].Phi.rows()) throw_named("Wrong size of phi!");
 
     for (int i = 0; i < Kinematics[0].Phi.rows(); i++)
     {
-        phi(i) = distance(Eigen::Map<const Eigen::Vector3d>(Kinematics[0].Phi(i).p.data), line, infinite, debug_).norm();
+        phi(i) = direction(Eigen::Map<const Eigen::Vector3d>(Kinematics[0].Phi(i).p.data), line, infinite, debug_).norm();
     }
 }
 
@@ -81,7 +80,7 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
     for (int i = 0; i < Kinematics[0].Phi.rows(); i++)
     {
         // direction from point to line
-        const Eigen::Vector3d dv = distance(Eigen::Map<const Eigen::Vector3d>(Kinematics[0].Phi(i).p.data), line, infinite, debug_);
+        const Eigen::Vector3d dv = direction(Eigen::Map<const Eigen::Vector3d>(Kinematics[0].Phi(i).p.data), line, infinite, debug_);
         phi(i) = dv.norm();
         for (int j = 0; j < J.cols(); j++)
         {
