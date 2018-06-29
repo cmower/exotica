@@ -36,7 +36,7 @@ REGISTER_TASKMAP_TYPE("Point2Line", exotica::Point2Line);
 
 namespace exotica
 {
-Eigen::Vector3d Point2Line::direction(const Eigen::Vector3d &point, const Eigen::Vector3d &line, const bool infinite, const bool dbg)
+Eigen::Vector3d Point2Line::direction(const Eigen::Vector3d &point)
 {
     // http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
     // let:
@@ -44,21 +44,27 @@ Eigen::Vector3d Point2Line::direction(const Eigen::Vector3d &point, const Eigen:
     //      e: end of line
     //      p: point
     // then the point on vector v = e-s that is closest to p is vp = s + t*(e-s) with
-    // t = ((s-p)*(e-s)) / (|e-s|^2)    (* denotes the dot product)
-
-    // the line starts at the origin of BaseOffset, hence s=0, v='line', vp=t*'line'
-    double t = (point).dot(line) / line.norm();
-    if (dbg) HIGHLIGHT_NAMED("P2L", "t " << t);
+    // t = -((s-p)*(e-s)) / (|e-s|^2)    (* denotes the dot product)
+    if (debug_) HIGHLIGHT_NAMED("P2L", "\e[4m" << link_name << "\e[0m");
+    if (debug_) HIGHLIGHT_NAMED("P2L", "p " << point.transpose());
+    if (debug_) HIGHLIGHT_NAMED("P2L", "ls " << line_start.transpose());
+    if (debug_) HIGHLIGHT_NAMED("P2L", "le " << line_end.transpose());
+    double t = -(line_start - point).dot(line) / line.squaredNorm();
+    std::stringstream ss;
+    ss << "t " << t;
     if (!infinite)
     {
         // clip to to range [0,1]
         t = std::min(std::max(0.0, t), 1.0);
-        if (dbg) HIGHLIGHT_NAMED("P2L", "|t| " << t);
+        ss << ", clipped |t| " << t;
     }
+    if (debug_) HIGHLIGHT_NAMED("P2L", ss.str());
 
     // vector from point 'p' to point 'vp' on line
-    const Eigen::Vector3d dv = (t * line) - point;
-    if (dbg) HIGHLIGHT_NAMED("P2L", "dv " << dv.transpose());
+    // vp = line_start + t * (line_end-line_start)
+    const Eigen::Vector3d dv = line_start + (t * line) - point;
+    if (debug_) HIGHLIGHT_NAMED("P2L", "vp " << (line_start + (t * line)).transpose());
+    if (debug_) HIGHLIGHT_NAMED("P2L", "dv " << dv.transpose());
     return dv;
 }
 
@@ -68,7 +74,8 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi)
 
     for (int i = 0; i < Kinematics[0].Phi.rows(); i++)
     {
-        phi(i) = direction(Eigen::Map<const Eigen::Vector3d>(Kinematics[0].Phi(i).p.data), line, infinite, debug_).norm();
+        const Eigen::Vector3d p = line_start + Eigen::Map<const Eigen::Vector3d>(Kinematics[0].Phi(i).p.data);
+        phi(i) = direction(p).norm();
     }
 }
 
@@ -79,8 +86,10 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
 
     for (int i = 0; i < Kinematics[0].Phi.rows(); i++)
     {
+        // point in base frame
+        const Eigen::Vector3d p = line_start + Eigen::Map<const Eigen::Vector3d>(Kinematics[0].Phi(i).p.data);
         // direction from point to line
-        const Eigen::Vector3d dv = direction(Eigen::Map<const Eigen::Vector3d>(Kinematics[0].Phi(i).p.data), line, infinite, debug_);
+        const Eigen::Vector3d dv = direction(p);
         phi(i) = dv.norm();
         for (int j = 0; j < J.cols(); j++)
         {
@@ -93,10 +102,9 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
         // visualisation of point, line and their distance
         if (debug_ && Server::isRos())
         {
-            visualization_msgs::MarkerArray ma;
-            const Eigen::Map<const Eigen::Vector3d> p(Kinematics[0].Phi(i).p.data);
             const ros::Time t = ros::Time::now();
             const std::string common_frame = "exotica/" + base_name;
+            visualization_msgs::MarkerArray ma;
             {
                 // line in base frame
                 visualization_msgs::Marker mc;
@@ -109,17 +117,17 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
                 mc.scale.y = 0.01;
                 mc.scale.z = 0.01;
                 // line start
-                geometry_msgs::Point p;
-                p.x = line_start.x();
-                p.y = line_start.y();
-                p.z = line_start.z();
-                mc.points.push_back(p);
+                geometry_msgs::Point pp;
+                pp.x = line_start.x();
+                pp.y = line_start.y();
+                pp.z = line_start.z();
+                mc.points.push_back(pp);
                 // line end
-                const Eigen::Vector3d pe = line_end;
-                p.x = pe.x();
-                p.y = pe.y();
-                p.z = pe.z();
-                mc.points.push_back(p);
+                const Eigen::Vector3d pe = infinite ? (p + dv) : line_end;
+                pp.x = pe.x();
+                pp.y = pe.y();
+                pp.z = pe.z();
+                mc.points.push_back(pp);
                 mc.color.r = 1;
                 mc.color.g = 1;
                 mc.color.b = 0;
@@ -173,6 +181,28 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
                 ma.markers.push_back(mdv);
             }
             pub_marker.publish(ma);
+            {
+                visualization_msgs::MarkerArray ma;
+                visualization_msgs::Marker mt;
+                mt.header.stamp = t;
+                mt.frame_locked = true;
+                mt.header.frame_id = common_frame;
+                mt.ns = "lnk/label/" + object_name_;
+                mt.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+                mt.text = link_name;
+                mt.pose.position.x = p.x();
+                mt.pose.position.y = p.y();
+                mt.pose.position.z = p.z();
+                mt.scale.x = 0.05;
+                mt.scale.y = 0.05;
+                mt.scale.z = 0.05;
+                mt.color.r = 1;
+                mt.color.g = 1;
+                mt.color.b = 1;
+                mt.color.a = 1;
+                ma.markers.push_back(mt);
+                pub_marker_label.publish(ma);
+            }
         }
     }
 }
@@ -190,7 +220,15 @@ void Point2Line::Instantiate(Point2LineInitializer &init)
 
     if (debug_ && Server::isRos())
     {
-        pub_marker = Server::advertise<visualization_msgs::MarkerArray>("p2l", 1000, true);
+        pub_marker = Server::advertise<visualization_msgs::MarkerArray>("p2l", 1, true);
+        pub_marker_label = Server::advertise<visualization_msgs::MarkerArray>("p2l_label", 1, true);
+        // delete previous markers
+        visualization_msgs::Marker md;
+        md.action = 3;  // DELETEALL
+        visualization_msgs::MarkerArray ma;
+        ma.markers.push_back(md);
+        pub_marker.publish(ma);
+        pub_marker_label.publish(ma);
     }
 }
 

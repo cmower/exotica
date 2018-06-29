@@ -51,27 +51,24 @@ public:
     virtual int taskSpaceDim();
 
 private:
-    Eigen::Vector3d line;   //<! point that defines the end of the line relative to the starting point
-    bool infinite;          //<! true: consider the line from 'start' to 'end' as segment
-                            //<! false: consider the vector from 'start' to 'end' as direction of line
+    Eigen::Vector3d line_start; //<! start point of line in base frame
+    Eigen::Vector3d line_end;   //<! end point of line in base frame
+    Eigen::Vector3d line;       //<! vector from start to end point of line
+    bool infinite;              //<! true: vector from start to end defines the direction of and infinite line
+                                //<! false: start and end define a line segment
 
     /**
      * @brief direction computes the vector from a point to its projection on a line
      * @param point point in base frame
-     * @param line end-point (#infinite: false) or direction (#infinite: true) of the line in base frame (origin at 0)
-     * @param infinite false: #line is the end of the line, true: #line is the direction of the line
-     * @param dbg true: print additional debugging information
      * @return 3D vector from #point to its projection on #line
      */
-    static Eigen::Vector3d direction(const Eigen::Vector3d &point, const Eigen::Vector3d &line, const bool infinite, const bool dbg);
+    Eigen::Vector3d direction(const Eigen::Vector3d &point);
 
     std::string link_name;  //<! frame of defined point
     std::string base_name;  //<! frame of defined line
 
-    Eigen::Vector3d line_start; //<! start point of line in base frame
-    Eigen::Vector3d line_end;   //<! end point of line in base frame
-
-    ros::Publisher pub_marker;  //<! publish marker for RViz
+    ros::Publisher pub_marker;        //<! publish marker for RViz
+    ros::Publisher pub_marker_label;  //<! marker label
 };
 
 typedef std::shared_ptr<Point2Line> Point2Line_Ptr;
