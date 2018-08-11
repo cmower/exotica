@@ -97,7 +97,7 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
         }
 
         // visualisation of point, line and their distance
-        if (debug_ && Server::isRos())
+        if (visualise && Server::isRos())
         {
             const ros::Time t = ros::Time::now();
             const std::string common_frame = "exotica/" + base_name;
@@ -215,7 +215,9 @@ void Point2Line::Instantiate(Point2LineInitializer &init)
     line = line_end - line_start;
     infinite = init.infinite;
 
-    if (debug_ && Server::isRos())
+    visualise = init.visualise;
+
+    if (visualise && Server::isRos())
     {
         pub_marker = Server::advertise<visualization_msgs::MarkerArray>("p2l", 1, true);
         pub_marker_label = Server::advertise<visualization_msgs::MarkerArray>("p2l_label", 1, true);

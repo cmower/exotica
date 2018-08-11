@@ -7,3 +7,4 @@ extend <exotica/TaskMap>
 
 Required Eigen::Vector3d EndPoint;  // point in 'Base' frame that defines the end of the line segment
 Optional bool infinite = true;      // true: interpret 'EndPoint' as the direction of an infinite line
+Optional bool visualise = false;    // true: publish points and lines as visualization_msgs/MarkerArray

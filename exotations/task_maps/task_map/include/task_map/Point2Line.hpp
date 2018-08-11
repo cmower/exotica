@@ -69,6 +69,8 @@ private:
 
     ros::Publisher pub_marker;        //<! publish marker for RViz
     ros::Publisher pub_marker_label;  //<! marker label
+
+    bool visualise;
 };
 
 typedef std::shared_ptr<Point2Line> Point2Line_Ptr;
