@@ -70,19 +70,19 @@ Eigen::Vector3d Point2Line::direction(const Eigen::Vector3d &point)
 
 void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi)
 {
-    if (phi.rows() != Kinematics[0].Phi.rows()) throw_named("Wrong size of phi!");
+    if (phi.rows() != Kinematics[0].Phi.rows()*3) throw_named("Wrong size of phi!");
 
     for (int i = 0; i < Kinematics[0].Phi.rows(); i++)
     {
         const Eigen::Vector3d p = line_start + Eigen::Map<const Eigen::Vector3d>(Kinematics[0].Phi(i).p.data);
-        phi(i) = direction(p).norm();
+        phi.segment<3>(i*3) = -direction(p);
     }
 }
 
 void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen::MatrixXdRef J)
 {
-    if (phi.rows() != Kinematics[0].Phi.rows()) throw_named("Wrong size of phi!");
-    if (J.rows() != Kinematics[0].J.rows() || J.cols() != Kinematics[0].J(0).data.cols()) throw_named("Wrong size of J! " << Kinematics[0].J(0).data.cols());
+    if (phi.rows() != Kinematics[0].Phi.rows()*3) throw_named("Wrong size of phi!");
+    if (J.rows() != Kinematics[0].J.rows()*3 || J.cols() != Kinematics[0].J(0).data.cols()) throw_named("Wrong size of J! " << Kinematics[0].J(0).data.cols());
 
     for (int i = 0; i < Kinematics[0].Phi.rows(); i++)
     {
@@ -90,13 +90,10 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
         const Eigen::Vector3d p = line_start + Eigen::Map<const Eigen::Vector3d>(Kinematics[0].Phi(i).p.data);
         // direction from point to line
         const Eigen::Vector3d dv = direction(p);
-        phi(i) = dv.norm();
+        phi.segment<3>(i*3) = -dv;
         for (int j = 0; j < J.cols(); j++)
         {
-            if (phi(i) > 1e-9)
-            {
-                J(i, j) = -(dv.normalized()).dot(Eigen::Map<const Eigen::Vector3d>(Kinematics[0].J[i].getColumn(j).vel.data));
-            }
+            J.middleRows<3>(i*3) = Kinematics[0].J[i].data.topRows<3>();
         }
 
         // visualisation of point, line and their distance
@@ -234,6 +231,6 @@ void Point2Line::Instantiate(Point2LineInitializer &init)
 
 int Point2Line::taskSpaceDim()
 {
-    return Kinematics[0].Phi.rows();
+    return Kinematics[0].Phi.rows()*3;
 }
 }  // namespace exotica
