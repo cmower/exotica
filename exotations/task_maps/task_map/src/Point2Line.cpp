@@ -70,19 +70,19 @@ Eigen::Vector3d Point2Line::direction(const Eigen::Vector3d &point)
 
 void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi)
 {
-    if (phi.rows() != Kinematics[0].Phi.rows()*3) throw_named("Wrong size of phi!");
+    if (phi.rows() != Kinematics[0].Phi.rows() * 3) throw_named("Wrong size of phi!");
 
     for (int i = 0; i < Kinematics[0].Phi.rows(); i++)
     {
         const Eigen::Vector3d p = line_start + Eigen::Map<const Eigen::Vector3d>(Kinematics[0].Phi(i).p.data);
-        phi.segment<3>(i*3) = -direction(p);
+        phi.segment<3>(i * 3) = -direction(p);
     }
 }
 
 void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen::MatrixXdRef J)
 {
-    if (phi.rows() != Kinematics[0].Phi.rows()*3) throw_named("Wrong size of phi!");
-    if (J.rows() != Kinematics[0].J.rows()*3 || J.cols() != Kinematics[0].J(0).data.cols()) throw_named("Wrong size of J! " << Kinematics[0].J(0).data.cols());
+    if (phi.rows() != Kinematics[0].Phi.rows() * 3) throw_named("Wrong size of phi!");
+    if (J.rows() != Kinematics[0].J.rows() * 3 || J.cols() != Kinematics[0].J(0).data.cols()) throw_named("Wrong size of J! " << Kinematics[0].J(0).data.cols());
 
     for (int i = 0; i < Kinematics[0].Phi.rows(); i++)
     {
@@ -90,10 +90,10 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
         const Eigen::Vector3d p = line_start + Eigen::Map<const Eigen::Vector3d>(Kinematics[0].Phi(i).p.data);
         // direction from point to line
         const Eigen::Vector3d dv = direction(p);
-        phi.segment<3>(i*3) = -dv;
+        phi.segment<3>(i * 3) = -dv;
         for (int j = 0; j < J.cols(); j++)
         {
-            J.middleRows<3>(i*3) = Kinematics[0].J[i].data.topRows<3>();
+            J.middleRows<3>(i * 3) = Kinematics[0].J[i].data.topRows<3>();
         }
 
         // visualisation of point, line and their distance
@@ -120,7 +120,7 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
                 pp.z = line_start.z();
                 mc.points.push_back(pp);
                 // line end
-                const Eigen::Vector3d pe = infinite ? (p + dv) : line_end;
+                const Eigen::Vector3d pe = p + dv;
                 pp.x = pe.x();
                 pp.y = pe.y();
                 pp.z = pe.z();
@@ -128,7 +128,7 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
                 mc.color.r = 1;
                 mc.color.g = 1;
                 mc.color.b = 0;
-                mc.color.a = 0.2;
+                mc.color.a = 1;
                 ma.markers.push_back(mc);
             }
             {
@@ -145,7 +145,7 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
                 ml.color.r = 1;
                 ml.color.g = 0;
                 ml.color.b = 0;
-                ml.color.a = 0.2;
+                ml.color.a = 1;
                 ml.pose.position.x = p.x();
                 ml.pose.position.y = p.y();
                 ml.pose.position.z = p.z();
@@ -231,6 +231,6 @@ void Point2Line::Instantiate(Point2LineInitializer &init)
 
 int Point2Line::taskSpaceDim()
 {
-    return Kinematics[0].Phi.rows()*3;
+    return Kinematics[0].Phi.rows() * 3;
 }
 }  // namespace exotica
