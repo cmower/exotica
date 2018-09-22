@@ -90,10 +90,10 @@ void Point2Line::update(Eigen::VectorXdRefConst x, Eigen::VectorXdRef phi, Eigen
         const Eigen::Vector3d p = line_start + Eigen::Map<const Eigen::Vector3d>(Kinematics[0].Phi(i).p.data);
         // direction from point to line
         const Eigen::Vector3d dv = direction(p);
-        phi.segment<3>(i * 3) = -dv;
+        phi.segment<3>(i * 3) = dv;
         for (int j = 0; j < J.cols(); j++)
         {
-            J.middleRows<3>(i * 3) = Kinematics[0].J[i].data.topRows<3>();
+            J.middleRows<3>(i * 3).col(j) = Kinematics[0].J[i].data.topRows<3>().col(j).dot(line/line.squaredNorm()) * line - Kinematics[0].J[i].data.topRows<3>().col(j);
         }
 
         // visualisation of point, line and their distance
