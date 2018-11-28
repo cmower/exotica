@@ -45,6 +45,7 @@ namespace exotica
 class EndPoseProblem : public PlanningProblem, public Instantiable<EndPoseProblemInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     EndPoseProblem();
     virtual ~EndPoseProblem();
 

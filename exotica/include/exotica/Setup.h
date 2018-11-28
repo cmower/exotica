@@ -48,6 +48,7 @@ namespace exotica
 class Setup : public Object, Uncopyable
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     ~Setup() noexcept
     {
     }

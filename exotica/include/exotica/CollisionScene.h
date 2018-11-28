@@ -12,6 +12,7 @@
 #include <unordered_set>
 
 #define REGISTER_COLLISION_SCENE_TYPE(TYPE, DERIV) EXOTICA_REGISTER(exotica::CollisionScene, TYPE, DERIV)
+
 namespace exotica
 {
 class AllowedCollisionMatrix
@@ -44,6 +45,7 @@ private:
 
 struct ContinuousCollisionProxy
 {
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     ContinuousCollisionProxy() : e1(nullptr), e2(nullptr), in_collision(false), time_of_contact(-1) {}
     std::shared_ptr<KinematicElement> e1;
     std::shared_ptr<KinematicElement> e2;
@@ -74,6 +76,7 @@ struct ContinuousCollisionProxy
 
 struct CollisionProxy
 {
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     CollisionProxy() : e1(nullptr), e2(nullptr), distance(0) {}
     std::shared_ptr<KinematicElement> e1;
     std::shared_ptr<KinematicElement> e2;
@@ -102,6 +105,7 @@ struct CollisionProxy
 class CollisionScene : public Uncopyable
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     CollisionScene() {}
     /**
        * \brief Destructor

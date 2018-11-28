@@ -10,6 +10,7 @@
 class KinematicElement
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     KinematicElement(int id, std::shared_ptr<KinematicElement> parent, const KDL::Segment& segment) : Parent(parent), Segment(segment), Id(id)
     {
     }

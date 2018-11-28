@@ -59,6 +59,7 @@ struct TaskIndexing
 class Task
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     Task();
 
     virtual void initialize(const std::vector<exotica::Initializer>& inits, std::shared_ptr<PlanningProblem> prob, TaskSpaceVector& phi);
@@ -79,6 +80,7 @@ protected:
 class TimeIndexedTask : public Task
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     TimeIndexedTask();
     virtual void initialize(const std::vector<exotica::Initializer>& inits, std::shared_ptr<PlanningProblem> prob, TaskSpaceVector& phi);
     void updateS();
@@ -100,6 +102,7 @@ public:
 class EndPoseTask : public Task
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     EndPoseTask();
     virtual void initialize(const std::vector<exotica::Initializer>& inits, std::shared_ptr<PlanningProblem> prob, TaskSpaceVector& phi);
     void updateS();
@@ -119,6 +122,7 @@ public:
 class SamplingTask : public Task
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     SamplingTask();
     virtual void initialize(const std::vector<exotica::Initializer>& inits, std::shared_ptr<PlanningProblem> prob, TaskSpaceVector& phi);
     void updateS();

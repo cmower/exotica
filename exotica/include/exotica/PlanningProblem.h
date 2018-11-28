@@ -69,6 +69,7 @@ enum class TerminationCriterion
 class PlanningProblem : public Object, Uncopyable, public virtual InstantiableBase, public std::enable_shared_from_this<PlanningProblem>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     PlanningProblem();
     virtual ~PlanningProblem() = default;
     virtual void InstantiateBase(const Initializer& init);

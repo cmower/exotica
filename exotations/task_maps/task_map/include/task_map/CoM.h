@@ -43,6 +43,7 @@ namespace exotica
 class CoM : public TaskMap, public Instantiable<CoMInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     CoM();
     virtual ~CoM();
 

@@ -43,6 +43,7 @@ namespace exotica
 class TimeIndexedSamplingProblem : public PlanningProblem, public Instantiable<TimeIndexedSamplingProblemInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     TimeIndexedSamplingProblem();
     virtual ~TimeIndexedSamplingProblem();
 

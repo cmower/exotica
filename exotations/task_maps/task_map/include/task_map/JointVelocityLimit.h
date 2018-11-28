@@ -45,6 +45,7 @@ namespace exotica
 class JointVelocityLimit : public TaskMap, public Instantiable<JointVelocityLimitInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     JointVelocityLimit();
     virtual ~JointVelocityLimit();
 

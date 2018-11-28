@@ -41,6 +41,7 @@ namespace exotica
 class Identity : public TaskMap, public Instantiable<IdentityInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     Identity();
     virtual ~Identity();
 

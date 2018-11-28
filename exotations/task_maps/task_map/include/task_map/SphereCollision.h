@@ -43,6 +43,7 @@ namespace exotica  //!< Since this is part of the core library, it will be withi
 class SphereCollision : public TaskMap, public Instantiable<SphereCollisionInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     SphereCollision();
     virtual ~SphereCollision();
 

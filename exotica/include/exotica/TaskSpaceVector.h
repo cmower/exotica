@@ -53,6 +53,7 @@ struct TaskVectorEntry
 class TaskSpaceVector
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     TaskSpaceVector();
     TaskSpaceVector& operator=(std::initializer_list<double> other);
     Eigen::VectorXd operator-(const TaskSpaceVector& other);

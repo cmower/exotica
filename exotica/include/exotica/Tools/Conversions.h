@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <exotica/Tools/Exception.h>
+
 #include <Eigen/Dense>
 #include <kdl/jacobian.hpp>
 #include <kdl/tree.hpp>
@@ -16,6 +17,7 @@ template <typename Derived>
 class Ref_ptr : public std::shared_ptr<Ref<Derived>>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     inline Ref_ptr()
         : std::shared_ptr<Ref<Derived>>()
     {

@@ -23,6 +23,7 @@ namespace exotica
 class Trajectory
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     Trajectory();
     Trajectory(const std::string& data);
     Trajectory(Eigen::MatrixXdRefConst data, double radius = 1.0);

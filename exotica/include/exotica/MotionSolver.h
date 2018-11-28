@@ -46,6 +46,7 @@ namespace exotica
 class MotionSolver : public Object, Uncopyable, public virtual InstantiableBase
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     MotionSolver();
     virtual ~MotionSolver() = default;
     virtual void InstantiateBase(const Initializer& init);

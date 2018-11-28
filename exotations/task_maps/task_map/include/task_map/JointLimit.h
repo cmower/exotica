@@ -46,6 +46,7 @@ namespace exotica
 class JointLimit : public TaskMap, public Instantiable<JointLimitInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     JointLimit();
     virtual ~JointLimit();
 

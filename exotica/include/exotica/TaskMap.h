@@ -52,6 +52,7 @@ namespace exotica
 class TaskMap : public Object, Uncopyable, public virtual InstantiableBase
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     TaskMap();
     virtual ~TaskMap();
     virtual void InstantiateBase(const Initializer& init);

@@ -69,6 +69,7 @@ struct AttachedObject
 class Scene : public Object, Uncopyable, public Instantiable<SceneInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     Scene(const std::string& name);
     Scene();
     virtual ~Scene();

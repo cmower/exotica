@@ -42,6 +42,7 @@ namespace exotica
 class SamplingProblem : public PlanningProblem, public Instantiable<SamplingProblemInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     SamplingProblem();
     virtual ~SamplingProblem();
 

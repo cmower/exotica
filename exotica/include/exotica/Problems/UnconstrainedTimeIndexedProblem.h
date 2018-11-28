@@ -46,6 +46,7 @@ namespace exotica
 class UnconstrainedTimeIndexedProblem : public PlanningProblem, public Instantiable<UnconstrainedTimeIndexedProblemInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     UnconstrainedTimeIndexedProblem();
     virtual ~UnconstrainedTimeIndexedProblem();
     virtual void Instantiate(UnconstrainedTimeIndexedProblemInitializer& init);

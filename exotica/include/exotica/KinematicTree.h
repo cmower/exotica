@@ -115,6 +115,7 @@ struct KinematicFrame
 class KinematicResponse
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     KinematicResponse();
     KinematicResponse(KinematicRequestFlags Flags, int Size, int N = 0);
     KinematicRequestFlags Flags = KinematicRequestFlags::KIN_FK;
@@ -132,6 +133,7 @@ public:
 class KinematicSolution
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     KinematicSolution();
     KinematicSolution(int start, int length);
     void Create(std::shared_ptr<KinematicResponse> solution);
@@ -147,6 +149,7 @@ public:
 class KinematicTree : public Uncopyable
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     KinematicTree();
     virtual ~KinematicTree() = default;
     void Instantiate(std::string JointGroup, robot_model::RobotModelPtr model, const std::string& name);
