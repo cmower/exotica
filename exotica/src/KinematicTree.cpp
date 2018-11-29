@@ -34,6 +34,7 @@
 #include <iostream>
 #include <queue>
 
+#include <moveit/robot_model/robot_model.h>
 #include <eigen_conversions/eigen_kdl.h>
 #include <geometric_shapes/mesh_operations.h>
 #include <geometric_shapes/shape_operations.h>
