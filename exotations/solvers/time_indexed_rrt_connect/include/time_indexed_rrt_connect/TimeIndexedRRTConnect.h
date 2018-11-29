@@ -36,7 +36,9 @@
 
 #include <memory>
 
+#include <exotica/MotionSolver.h>
 #include <exotica/Problems/TimeIndexedSamplingProblem.h>
+
 #include <ompl/base/SpaceInformation.h>
 #include <ompl/base/StateSpace.h>
 #include <ompl/base/StateValidityChecker.h>
@@ -45,15 +47,15 @@
 #include <ompl/base/spaces/TimeStateSpace.h>
 #include <ompl/geometric/SimpleSetup.h>
 #include <ompl/tools/config/SelfConfig.h>
-#include <time_indexed_rrt_connect/TimeIndexedRRTConnectInitializer.h>
 
-#include <exotica/MotionSolver.h>
+#include <time_indexed_rrt_connect/TimeIndexedRRTConnectInitializer.h>
 
 namespace exotica
 {
 class OMPLTimeIndexedRNStateSpace : public ompl::base::CompoundStateSpace
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     class StateType : public ompl::base::CompoundStateSpace::StateType
     {
     public:
@@ -94,6 +96,7 @@ public:
 class OMPLTimeIndexedStateValidityChecker : public ompl::base::StateValidityChecker
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     OMPLTimeIndexedStateValidityChecker(const ompl::base::SpaceInformationPtr &si, const TimeIndexedSamplingProblem_ptr &prob);
 
     virtual bool isValid(const ompl::base::State *state) const;
@@ -109,6 +112,7 @@ typedef boost::function<ompl::base::PlannerPtr(const ompl::base::SpaceInformatio
 class TimeIndexedRRTConnect : public MotionSolver, Instantiable<TimeIndexedRRTConnectInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     TimeIndexedRRTConnect();
 
     virtual ~TimeIndexedRRTConnect();
@@ -144,6 +148,7 @@ using namespace ompl;
 class OMPLTimeIndexedRRTConnect : public base::Planner
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     /** \brief Constructor */
     OMPLTimeIndexedRRTConnect(const base::SpaceInformationPtr &si);
 
