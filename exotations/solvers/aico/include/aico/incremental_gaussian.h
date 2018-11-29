@@ -101,7 +101,7 @@ public:
         }
     }
 
-    inline void add(SinglePassMeanCoviariance& M)
+    inline void add(SinglePassMeanCovariance& M)
     {
         add(M.W, M.T, M.S);
     }
