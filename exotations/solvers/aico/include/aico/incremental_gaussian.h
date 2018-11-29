@@ -52,6 +52,7 @@ private:
     Eigen::MatrixXd S = Eigen::MatrixXd(0, 0);
 
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     SinglePassMeanCovariance() = default;
 
     SinglePassMeanCovariance(int D_)
@@ -100,7 +101,7 @@ public:
         }
     }
 
-    inline void add(SinglePassMeanCovariance& M)
+    inline void add(SinglePassMeanCoviariance& M)
     {
         add(M.W, M.T, M.S);
     }

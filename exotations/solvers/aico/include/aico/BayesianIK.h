@@ -56,6 +56,7 @@ namespace exotica
 class BayesianIK : public MotionSolver, public Instantiable<BayesianIKInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     BayesianIK();
     virtual void Instantiate(BayesianIKInitializer& init);
     virtual ~BayesianIK();

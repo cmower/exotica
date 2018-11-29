@@ -82,6 +82,7 @@ namespace exotica
 class AICOsolver : public MotionSolver, public Instantiable<AICOsolverInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     AICOsolver();
     virtual void Instantiate(AICOsolverInitializer& init);
     virtual ~AICOsolver();
