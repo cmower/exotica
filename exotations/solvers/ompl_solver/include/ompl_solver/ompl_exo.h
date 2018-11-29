@@ -1,5 +1,4 @@
 /*
- *  Created on: 10 Oct 2017
  *      Author: Yiming Yang
  *
  * Copyright (c) 2017, University of Edinburgh
@@ -55,6 +54,7 @@ namespace exotica
 class OMPLStateSpace : public ompl::base::CompoundStateSpace
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     OMPLStateSpace(SamplingProblem_ptr &prob) : ompl::base::CompoundStateSpace(), prob_(prob)
     {
     }
@@ -72,6 +72,7 @@ protected:
 class OMPLStateValidityChecker : public ompl::base::StateValidityChecker
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     OMPLStateValidityChecker(const ompl::base::SpaceInformationPtr &si, const SamplingProblem_ptr &prob);
 
     virtual bool isValid(const ompl::base::State *state) const;
@@ -85,6 +86,7 @@ protected:
 class OMPLRNStateSpace : public OMPLStateSpace
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     class StateType : public ompl::base::CompoundStateSpace::StateType
     {
     public:
@@ -113,6 +115,7 @@ public:
 class OMPLSE3RNStateSpace : public OMPLStateSpace
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     class StateType : public ompl::base::CompoundStateSpace::StateType
     {
     public:
@@ -150,6 +153,7 @@ public:
 class OMPLSE2RNStateSpace : public OMPLStateSpace
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     class StateType : public ompl::base::CompoundStateSpace::StateType
     {
     public:
@@ -187,6 +191,7 @@ public:
 class OMPLRNProjection : public ompl::base::ProjectionEvaluator
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     OMPLRNProjection(const ompl::base::StateSpacePtr &space,
                      const std::vector<int> &vars)
         : ompl::base::ProjectionEvaluator(space), variables_(vars)
@@ -223,6 +228,7 @@ private:
 class OMPLSE3RNProjection : public ompl::base::ProjectionEvaluator
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     OMPLSE3RNProjection(const ompl::base::StateSpacePtr &space,
                         const std::vector<int> &vars)
         : ompl::base::ProjectionEvaluator(space), variables_(vars)
@@ -259,6 +265,7 @@ private:
 class OMPLSE2RNProjection : public ompl::base::ProjectionEvaluator
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     OMPLSE2RNProjection(const ompl::base::StateSpacePtr &space,
                         const std::vector<int> &vars)
         : ompl::base::ProjectionEvaluator(space), variables_(vars)

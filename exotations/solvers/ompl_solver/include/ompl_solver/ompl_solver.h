@@ -63,6 +63,7 @@ template <class ProblemType>
 class OMPLsolver : public MotionSolver
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     OMPLsolver();
 
     virtual ~OMPLsolver();

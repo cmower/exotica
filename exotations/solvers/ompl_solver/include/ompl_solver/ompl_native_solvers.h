@@ -41,6 +41,7 @@ namespace exotica
 class RRT : public OMPLsolver<SamplingProblem>, Instantiable<RRTInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     RRT();
     virtual void Instantiate(RRTInitializer& init);
 };
@@ -48,6 +49,7 @@ public:
 class RRTConnect : public OMPLsolver<SamplingProblem>, Instantiable<RRTConnectInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     RRTConnect();
     virtual void Instantiate(RRTConnectInitializer& init);
     void setRange(double range);
@@ -57,6 +59,7 @@ public:
 class EST : public OMPLsolver<SamplingProblem>, Instantiable<ESTInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     EST();
     virtual void Instantiate(ESTInitializer& init);
 };
@@ -64,6 +67,7 @@ public:
 class KPIECE : public OMPLsolver<SamplingProblem>, Instantiable<KPIECEInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     KPIECE();
     virtual void Instantiate(KPIECEInitializer& init);
 };
@@ -71,6 +75,7 @@ public:
 class BKPIECE : public OMPLsolver<SamplingProblem>, Instantiable<BKPIECEInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     BKPIECE();
     virtual void Instantiate(BKPIECEInitializer& init);
 };
@@ -78,6 +83,7 @@ public:
 class PRM : public OMPLsolver<SamplingProblem>, Instantiable<PRMInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     PRM();
     virtual void Instantiate(PRMInitializer& init);
     void growRoadmap(double t);
@@ -94,6 +100,7 @@ public:
 class LazyPRM : public OMPLsolver<SamplingProblem>, Instantiable<LazyPRMInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     LazyPRM();
     virtual void Instantiate(LazyPRMInitializer& init);
     void clear();
@@ -108,6 +115,7 @@ public:
 class RRTStar : public OMPLsolver<SamplingProblem>, Instantiable<RRTStarInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     RRTStar();
     virtual void Instantiate(RRTStarInitializer& init);
 };
@@ -115,6 +123,7 @@ public:
 class LBTRRT : public OMPLsolver<SamplingProblem>, Instantiable<LBTRRTInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     LBTRRT();
     virtual void Instantiate(LBTRRTInitializer& init);
 };
