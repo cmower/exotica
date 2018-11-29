@@ -1,5 +1,4 @@
 /*
- *  Created on: 15 Jul 2014
  *      Author: Yiming Yang
  * 
  * Copyright (c) 2016, University of Edinburgh
@@ -34,11 +33,13 @@
 #ifndef IK_SOLVER_H_
 #define IK_SOLVER_H_
 
-#include <exotica/Exotica.h>
-#include <exotica/Problems/UnconstrainedEndPoseProblem.h>
-#include <ik_solver/IKsolverInitializer.h>
 #include <fstream>
 #include <iostream>
+
+#include <exotica/Exotica.h>
+#include <exotica/Problems/UnconstrainedEndPoseProblem.h>
+
+#include <ik_solver/IKsolverInitializer.h>
 
 namespace exotica
 {
@@ -48,6 +49,7 @@ namespace exotica
 class IKsolver : public MotionSolver, public Instantiable<IKsolverInitializer>
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     IKsolver();
     virtual ~IKsolver();
 
