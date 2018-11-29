@@ -24,6 +24,9 @@ find_package(TinyXML2 REQUIRED)
 include(Exotica)
 include(AddInitializer)
 
+# MoveIt Core Robot Model isnt aligned :'(
+add_definitions(-DEIGEN_MAX_ALIGN_BYTES=0)
+
 include(GetGitRevisionDescription)
 get_git_head_revision(GIT_REFSPEC GIT_SHA1)
 configure_file("src/Version.cpp.in" "${exotica_BINARY_DIR}/generated/Version.cpp" @ONLY)
